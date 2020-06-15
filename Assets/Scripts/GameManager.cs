@@ -133,7 +133,7 @@ public class GameManager : MonoBehaviour
     {
         //workarround: instantiate to get attributes and than destroy again...
         GameObject buildingObject = Instantiate(_buildingPrefabs[_selectedBuildingPrefabIndex], new Vector3(0, 0, 0), Quaternion.identity);
-        Building building = buildingObject.GetComponent<Building>();
+        ProductionBuilding building = buildingObject.GetComponent<ProductionBuilding>();
 
         bool tileTypeCompatible = Array.Exists(building.compatibleTileTypes, type => type == tile._type);
         bool enoughMoney = money >= building.buildCostMoney;
@@ -261,7 +261,7 @@ public class GameManager : MonoBehaviour
                     //place building
                     Vector3 position = t.transform.position + _buildingPrefabs[_selectedBuildingPrefabIndex].transform.position;
                     GameObject buildingObject = Instantiate(_buildingPrefabs[_selectedBuildingPrefabIndex], position, Quaternion.identity);
-                    Building building = buildingObject.GetComponent<Building>();
+                    ProductionBuilding building = buildingObject.GetComponent<ProductionBuilding>();
                     t._building = building;
                     building.tileBuildOn = t;
                     building.gameManager = this;
