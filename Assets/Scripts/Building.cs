@@ -4,8 +4,7 @@ using UnityEngine;
 
 public abstract class Building : MonoBehaviour
 {
-    #region Attributes
-    public BuildingTypes buildingType;
+    #region Attributes    
     public int upkeepCost; // The money cost per minute
     public int buildCostMoney; // placement money cost
     public int buildCostPlanks; // placement planks cost
@@ -13,10 +12,6 @@ public abstract class Building : MonoBehaviour
 
     public GameManager gameManager;
     public Tile tileBuildOn; // Reference to the tile it is built on
-    #endregion
-
-    #region Enumerations
-    public enum BuildingTypes { Fishery, LumberJack };
     #endregion
 
     #region Manager References
@@ -41,6 +36,11 @@ public abstract class Building : MonoBehaviour
     public void WorkerRemovedFromBuilding(Worker w)
     {
         _workers.Remove(w);
+    }
+
+    virtual public int getUpkeepCost()
+    {
+        return upkeepCost;
     }
     #endregion
 }

@@ -70,12 +70,6 @@ public class ProductionBuilding : Building
             return true;
         }
 
-        if(gameManager.HasResourceInWarehoues(inputResourceType))
-        {
-            gameManager.TakeResourceFromWareHouse(inputResourceType);
-            return true;
-        }
-
-        return false;
+        return gameManager.TakeResourceFromWareHouse(inputResourceType);
     }
 }

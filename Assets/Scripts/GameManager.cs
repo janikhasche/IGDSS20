@@ -88,7 +88,7 @@ public class GameManager : MonoBehaviour
                 Tile tile = _tileMap[x, z];
                 if(tile._building != null)
                 {
-                    money -= tile._building.upkeepCost;
+                    money -= tile._building.getUpkeepCost();
                 }
             }
         }
@@ -133,7 +133,7 @@ public class GameManager : MonoBehaviour
     {
         //workarround: instantiate to get attributes and than destroy again...
         GameObject buildingObject = Instantiate(_buildingPrefabs[_selectedBuildingPrefabIndex], new Vector3(0, 0, 0), Quaternion.identity);
-        ProductionBuilding building = buildingObject.GetComponent<ProductionBuilding>();
+        Building building = buildingObject.GetComponent<Building>();
 
         bool tileTypeCompatible = Array.Exists(building.compatibleTileTypes, type => type == tile._type);
         bool enoughMoney = money >= building.buildCostMoney;
@@ -214,15 +214,13 @@ public class GameManager : MonoBehaviour
         _ResourcesInWarehouse_Schnapps = _resourcesInWarehouse[ResourceTypes.Schnapps];
     }
 
-    //Checks if there is at least one material for the queried resource type in the warehouse
-    public bool HasResourceInWarehoues(ResourceTypes resource)
+    public bool TakeResourceFromWareHouse(ResourceTypes resource)
     {
-        return _resourcesInWarehouse[resource] >= 1;
-    }
+        if (_resourcesInWarehouse[resource] < 1)
+            return false;
 
-    public void TakeResourceFromWareHouse(ResourceTypes resource)
-    {
         _resourcesInWarehouse[resource] -= 1;
+        return true;
     }
 
     public void PutResourceInWareHouse(ResourceTypes resource, float ammount)
@@ -261,7 +259,7 @@ public class GameManager : MonoBehaviour
                     //place building
                     Vector3 position = t.transform.position + _buildingPrefabs[_selectedBuildingPrefabIndex].transform.position;
                     GameObject buildingObject = Instantiate(_buildingPrefabs[_selectedBuildingPrefabIndex], position, Quaternion.identity);
-                    ProductionBuilding building = buildingObject.GetComponent<ProductionBuilding>();
+                    Building building = buildingObject.GetComponent<Building>();
                     t._building = building;
                     building.tileBuildOn = t;
                     building.gameManager = this;

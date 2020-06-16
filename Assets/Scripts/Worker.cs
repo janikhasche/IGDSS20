@@ -10,11 +10,12 @@ public class Worker : MonoBehaviour
     #endregion
 
     public float _age; // The age of this worker
-    public float _happiness; // The happiness of this worker
+    public float _happiness = 1.0f; // The happiness of this worker
 
     // Start is called before the first frame update
     void Start()
     {
+        InvokeRepeating("Age", 15, 15);
     }
 
     // Update is called once per frame
@@ -44,6 +45,39 @@ public class Worker : MonoBehaviour
         {
             Die();
         }
+
+        _age++;
+
+
+        // get fish, clothes and schnapps, (TODO: maybe children should not drink schnapps...)
+        bool gotFish = _gameManager.TakeResourceFromWareHouse(GameManager.ResourceTypes.Fish);
+        bool gotClothes = _gameManager.TakeResourceFromWareHouse(GameManager.ResourceTypes.Clothes);
+        bool gotSchnapps = _gameManager.TakeResourceFromWareHouse(GameManager.ResourceTypes.Schnapps);
+        bool hasJob = true; //TODO
+
+        List<bool> happynessFactors = new List<bool>();
+        happynessFactors.Add(gotFish);
+        happynessFactors.Add(gotClothes);
+        happynessFactors.Add(gotSchnapps);
+        happynessFactors.Add(hasJob);
+
+        _happiness = calcHappyness(happynessFactors);
+
+
+    }
+
+    private float calcHappyness(List<bool> happynessFactors)
+    {
+        float happyNess = 0;
+        float happyNessWeight = 1.0f / happynessFactors.Count;
+
+        foreach(bool factor in happynessFactors)
+        {
+            if (factor)
+                happyNess += happyNessWeight;
+        }
+
+        return happyNess;
     }
 
 
