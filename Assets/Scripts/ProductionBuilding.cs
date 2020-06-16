@@ -12,6 +12,7 @@ public class ProductionBuilding : Building
     public GameManager.ResourceTypes outputResourceType; // A choice for output resource type 
     public Tile.TileTypes efficiencyTileType; // A choice if its efficiency scales with a specific type of surrounding tile
     public int maxNumEfficiencyNeighbours;  // The minimum and maximum number of surrounding tiles its efficiency scales with (0-6)
+    public int numAvailableJobs;
     #endregion
 
     // Start is called before the first frame update
@@ -24,7 +25,11 @@ public class ProductionBuilding : Building
             resourceGenerationIntervalSeconds = Convert.ToInt32((double)resourceGenerationIntervalSeconds * (1.0 / efficiency));
             InvokeRepeating("processResources", 0, resourceGenerationIntervalSeconds);
         }
-            
+         
+        for(int i = 0; i < numAvailableJobs; i++)
+        {
+            _jobManager.registerJob(new Job(this));
+        }
     }
 
     private float calcEfficiency()
@@ -58,9 +63,33 @@ public class ProductionBuilding : Building
     {
         if(getInputResources())
         {
-            gameManager.PutResourceInWareHouse(outputResourceType, outputCountPerCycle);
+            float workerEfficiency = calcWorkerEfficiency();
+            workerEfficiency = Mathf.Max(workerEfficiency, 0.5f); //otherwise the game progresses really slow...
+
+            float generetedResources = outputCountPerCycle * workerEfficiency;
+            gameManager.PutResourceInWareHouse(outputResourceType, generetedResources);
         }
         
+    }
+
+    private float calcWorkerEfficiency()
+    {
+        int nWorkers = 0;
+        float happinessSum = 0;
+
+        foreach(Worker w in _workers)
+        {
+            nWorkers++;
+            happinessSum += w._happiness;
+        }
+
+        if (nWorkers == 0)
+            return 0;
+
+        float happinessAverage = happinessSum / nWorkers;
+        float manPower = (float)nWorkers / (float)numAvailableJobs;
+
+        return manPower * happinessAverage;
     }
 
     private bool getInputResources()
@@ -70,6 +99,6 @@ public class ProductionBuilding : Building
             return true;
         }
 
-        return gameManager.TakeResourceFromWareHouse(inputResourceType);
+        return gameManager.TakeResourceFromWareHouse(inputResourceType, 1);
     }
 }

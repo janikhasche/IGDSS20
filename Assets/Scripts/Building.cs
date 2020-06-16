@@ -15,7 +15,7 @@ public abstract class Building : MonoBehaviour
     #endregion
 
     #region Manager References
-    JobManager _jobManager; //Reference to the JobManager
+    public JobManager _jobManager; //Reference to the JobManager
     #endregion
     
     #region Workers

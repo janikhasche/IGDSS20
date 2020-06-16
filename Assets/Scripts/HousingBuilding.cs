@@ -91,6 +91,8 @@ public class HousingBuilding : Building
             //TODO position 
             GameObject workerObject = Instantiate(workerPrefab, position, Quaternion.identity);
             Worker worker = workerObject.GetComponent<Worker>();
+            worker._gameManager = gameManager;
+            worker._jobManager = gameManager.jobManager;
             _workers.Add(worker);
             residents[residentIndex] = worker;
         }

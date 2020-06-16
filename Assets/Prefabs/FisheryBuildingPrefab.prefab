@@ -57,6 +57,11 @@ PrefabInstance:
       propertyPath: maxNumEfficiencyNeighbours
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2734363239445603364, guid: 3f4b534fb06c6bc42bef9fec80a4dc56,
+        type: 3}
+      propertyPath: numAvailableJobs
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 4739893458150596683, guid: 3f4b534fb06c6bc42bef9fec80a4dc56,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -116,6 +121,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FisheryBuildingPrefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 8664611032409491399, guid: 3f4b534fb06c6bc42bef9fec80a4dc56,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3f4b534fb06c6bc42bef9fec80a4dc56, type: 3}

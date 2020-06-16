@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
     #region Buildings
     public GameObject[] _buildingPrefabs; //References to the building prefabs
     public int _selectedBuildingPrefabIndex = 0; //The current index used for choosing a prefab to spawn from the _buildingPrefabs list
+
+    public JobManager jobManager;
     #endregion
 
 
@@ -60,6 +62,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        jobManager = new JobManager();
+
         PopulateResourceDictionary();
 		createTileField();
         InvokeRepeating("handleEconomyTick", 60, 60);
@@ -214,12 +218,12 @@ public class GameManager : MonoBehaviour
         _ResourcesInWarehouse_Schnapps = _resourcesInWarehouse[ResourceTypes.Schnapps];
     }
 
-    public bool TakeResourceFromWareHouse(ResourceTypes resource)
+    public bool TakeResourceFromWareHouse(ResourceTypes resource, float amount)
     {
-        if (_resourcesInWarehouse[resource] < 1)
+        if (_resourcesInWarehouse[resource] < amount)
             return false;
 
-        _resourcesInWarehouse[resource] -= 1;
+        _resourcesInWarehouse[resource] -= amount;
         return true;
     }
 
@@ -245,7 +249,6 @@ public class GameManager : MonoBehaviour
         {
             if (t)
             {
-                Debug.Log("Click on Tile: " + t.name);
                 if (canBuildOntile(_buildingPrefabs[_selectedBuildingPrefabIndex], t))
                 {
                     //invisible decorations to place building
@@ -263,8 +266,10 @@ public class GameManager : MonoBehaviour
                     t._building = building;
                     building.tileBuildOn = t;
                     building.gameManager = this;
+                    building._jobManager = jobManager;
 
                     money -= building.buildCostMoney;
+                    TakeResourceFromWareHouse(ResourceTypes.Planks, building.buildCostPlanks);
                 }
             }
         }

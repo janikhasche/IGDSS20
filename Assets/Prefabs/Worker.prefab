@@ -107,5 +107,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c818ba67fc2d8d49820410205e90c27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _jobManager: {fileID: 0}
+  _gameManager: {fileID: 0}
   _age: 0
   _happiness: 0
+  ageTimeSeconds: 5
+  resourcesPerAge: 0.001
