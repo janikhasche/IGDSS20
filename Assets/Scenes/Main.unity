@@ -504,7 +504,7 @@ MonoBehaviour:
   tileDistanceX: 8.83
   tileOffsetZOddRow: 5
   tileMaxOffsetY: 40
-  money: 3000
+  money: 900000
   _buildingPrefabs:
   - {fileID: 5416501994990056478, guid: 3f70d86239a718f4e85a75232f01d211, type: 3}
   - {fileID: 3593205469656735091, guid: 94193c0e30c621046af84f03a19d47e5, type: 3}
@@ -513,7 +513,9 @@ MonoBehaviour:
   - {fileID: 8974113333369180123, guid: c25438a76cec75c4488466dc15c78ea8, type: 3}
   - {fileID: 296307761483044956, guid: 613916ca0c04e2c429d7bf93f3f292e7, type: 3}
   - {fileID: 4222020988825216933, guid: fee16c5e2b91d4f4ca21232f0461d2bb, type: 3}
+  - {fileID: 862627842597197613, guid: c3cac7497a8dffd47a3b8444b9a06c86, type: 3}
   _selectedBuildingPrefabIndex: 0
+  jobManager: {fileID: 0}
   _ResourcesInWarehouse_Fish: 0
   _ResourcesInWarehouse_Wood: 0
   _ResourcesInWarehouse_Planks: 0

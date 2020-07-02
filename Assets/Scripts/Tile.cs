@@ -17,4 +17,23 @@ public class Tile : MonoBehaviour
     #endregion
 
     //This class acts as a data container and has no functionality
+
+
+    public float getWeight()
+    {
+        if (_type == TileTypes.Water)
+            return 30;
+        if (_type == TileTypes.Sand)
+            return 2;
+        if (_type == TileTypes.Grass)
+            return 1;
+        if (_type == TileTypes.Forest)
+            return 2;
+        if (_type == TileTypes.Stone)
+            return 1;
+        if (_type == TileTypes.Mountain)
+            return 3;
+
+        return 0;
+    }
 }

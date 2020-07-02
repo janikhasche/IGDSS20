@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEditor.Animations;
 using UnityEngine;
+using Vector3 = UnityEngine.Vector3;
 
 public class Worker : MonoBehaviour
 {
@@ -17,6 +19,17 @@ public class Worker : MonoBehaviour
 
     PhaseOfLife phaseOfLife = PhaseOfLife.Child;
 
+    public Tile hometile = null;
+    public Tile worktile = null;
+    public Vector3 homePosition;
+    private Tile currentTile = null;
+    private Tile nextTile = null;
+
+    private bool working = false;
+    private bool onWayToWork = false;
+
+    public float walkSpeed = 2.0f;
+
     #region Enumerations
     enum PhaseOfLife { Child, Worker, Old };
     #endregion
@@ -27,11 +40,59 @@ public class Worker : MonoBehaviour
         InvokeRepeating("Age", ageTimeSeconds, ageTimeSeconds);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if (worktile != null)
+        {
+            if (!working)
+            {
+                working = true;
+                onWayToWork = true;
+                currentTile = hometile;
+                nextTile = worktile; //TODO: navigationmanager.getNextTile (currentTile, destTile)
+
+                transform.position = hometile.transform.position;
+            }
+
+        }
+        else
+        {
+            if (working)
+            {
+                working = false;
+            }
+
+        }
+
+        if (onWayToWork)
+        {                
+            float speed = walkSpeed * Time.deltaTime;
+            Vector3 sourcePosition = new Vector3(transform.position.x, currentTile.transform.position.y, transform.position.z);
+            Vector3 destPosition = new Vector3( nextTile.transform.position.x, currentTile.transform.position.y , nextTile.transform.position.z);
+            Vector3 currentPosition = Vector3.MoveTowards(sourcePosition, destPosition, speed);
+
+            float distance = Vector3.Distance(currentTile.transform.position, destPosition);
+            float distanceLeft = Vector3.Distance(currentPosition, destPosition);
+            float distanceProgress = distanceLeft / distance;
+
+            float jumpBorderValue = (currentTile.transform.position.y > nextTile.transform.position.y) ? 0.4f : 0.6f;
+            if (distanceProgress < jumpBorderValue)
+            {
+                transform.position = new Vector3(currentPosition.x, nextTile.transform.position.y, currentPosition.z);
+            }
+            else
+            {
+                transform.position = currentPosition;
+            }
+
+            if(transform.position == nextTile.transform.position)
+            {
+                //TODO get next tile
+                bool reached = true;
+            }
+        }
     }
+
 
 
     private void Age()
@@ -40,7 +101,7 @@ public class Worker : MonoBehaviour
         //When becoming of age, the worker enters the job market, and leaves it when retiring.
         //Eventually, the worker dies and leaves an empty space in his home. His Job occupation is also freed up.
 
-        if (_age == 14)
+        if (_age == 2)
         {
             BecomeOfAge();
         }

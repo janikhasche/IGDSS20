@@ -17,6 +17,7 @@ public class Job
     {
         _worker = w;
         _building.WorkerAssignedToBuilding(w);
+        _worker.worktile = _building.tileBuildOn;
     }
 
     public void RemoveWorker(Worker w)

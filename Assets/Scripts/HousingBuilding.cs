@@ -86,13 +86,13 @@ public class HousingBuilding : Building
         int residentIndex = findFreeResidentSpot();
         if (residentIndex >= 0)
         {
-            //TODO set to random position in tile(kann ausgelagert werden in building, placeworker)
             Vector3 position = this.transform.position + workerPrefab.transform.position + residentSpotPositions[residentIndex];
-            //TODO position 
             GameObject workerObject = Instantiate(workerPrefab, position, Quaternion.identity);
             Worker worker = workerObject.GetComponent<Worker>();
             worker._gameManager = gameManager;
             worker._jobManager = gameManager.jobManager;
+            worker.hometile = tileBuildOn;
+            worker.homePosition = position;
             _workers.Add(worker);
             residents[residentIndex] = worker;
         }
