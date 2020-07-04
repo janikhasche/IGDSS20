@@ -34,6 +34,7 @@ public class HousingBuilding : Building
             residentSpotPositions[i] = new Vector3(workerPositionsX[x], 0.0f, workerPositionsZ[z]);
         }
 
+        startWorkersAmount = 1;
         for (int i = 0; i < startWorkersAmount; i++)
         {
             generateWorker();

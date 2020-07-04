@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.Assertions;
 using Vector3 = UnityEngine.Vector3;
 
 public class Worker : MonoBehaviour
@@ -26,7 +27,11 @@ public class Worker : MonoBehaviour
     private Tile nextTile = null;
 
     private bool working = false;
-    private bool onWayToWork = false;
+    private bool dudeWalking = false;
+
+    private bool onWayToWork = true;
+    private int currentWayTileIndex = 0;
+    List<Tile> wayToWork;
 
     public float walkSpeed = 2.0f;
 
@@ -47,11 +52,17 @@ public class Worker : MonoBehaviour
             if (!working)
             {
                 working = true;
-                onWayToWork = true;
+                dudeWalking = true;
                 currentTile = hometile;
-                nextTile = worktile; //TODO: navigationmanager.getNextTile (currentTile, destTile)
+                //nextTile = worktile; //TODO: navigationmanager.getNextTile (currentTile, destTile)
 
                 transform.position = hometile.transform.position;
+
+                wayToWork = _gameManager.navigationManager.getTilePathTo(currentTile, worktile, _gameManager._tileMap);
+                Assert.IsTrue(wayToWork.Count > 0);
+
+                currentWayTileIndex = 1;
+                nextTile = wayToWork[currentWayTileIndex];
             }
 
         }
@@ -64,7 +75,7 @@ public class Worker : MonoBehaviour
 
         }
 
-        if (onWayToWork)
+        if (dudeWalking)
         {                
             float speed = walkSpeed * Time.deltaTime;
             Vector3 sourcePosition = new Vector3(transform.position.x, currentTile.transform.position.y, transform.position.z);
@@ -85,10 +96,27 @@ public class Worker : MonoBehaviour
                 transform.position = currentPosition;
             }
 
-            if(transform.position == nextTile.transform.position)
+            //reached nextTile ?   
+            if (transform.position == nextTile.transform.position)
             {
-                //TODO get next tile
-                bool reached = true;
+                
+                // reached worktile?
+                if(nextTile == worktile)
+                {
+                    onWayToWork = false;
+                }
+                else if(nextTile == hometile)
+                {
+                    onWayToWork = true;
+                }
+
+                if(onWayToWork)
+                    currentWayTileIndex += 1;
+                else
+                    currentWayTileIndex -= 1;
+
+                nextTile = wayToWork[currentWayTileIndex];
+               
             }
         }
     }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class GameManager : MonoBehaviour
 {
@@ -23,7 +24,7 @@ public class GameManager : MonoBehaviour
     public float money;
 
     #region Map generation
-    private Tile[,] _tileMap; //2D array of all spawned tiles
+    public Tile[,] _tileMap; //2D array of all spawned tiles
     #endregion
 
     #region Buildings
@@ -31,6 +32,7 @@ public class GameManager : MonoBehaviour
     public int _selectedBuildingPrefabIndex = 0; //The current index used for choosing a prefab to spawn from the _buildingPrefabs list
 
     public JobManager jobManager;
+    public NavigationManager navigationManager;
     #endregion
 
 
@@ -67,6 +69,19 @@ public class GameManager : MonoBehaviour
         PopulateResourceDictionary();
 		createTileField();
         InvokeRepeating("handleEconomyTick", 60, 60);
+
+        //generate weightmap of tilemap
+        int mapSize = _tileMap.GetLength(0);
+        double[,] weightMap = new double[mapSize, mapSize];
+        for (int x = 0; x < mapSize; x++)
+        {
+            for (int y = 0; y < mapSize; y++)
+            {
+                weightMap[x, y] = _tileMap[x, y].getWeight();
+            }
+        }
+        navigationManager = new NavigationManager(weightMap, mapSize);
+
     }
 
     // Update is called once per frame
